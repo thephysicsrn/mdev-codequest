@@ -1,0 +1,65 @@
+/* ==========================================================================
+   DESIGN TOKENS - MDEV CODEQUEST GAMIFIED THEME
+   Cores vivas, estilo RPG medieval mágico, contrastes amigáveis para crianças
+   ========================================================================== */
+
+:root {
+  /* Paleta Principal RPG */
+  --bg-primary: #0f1423;
+  --bg-secondary: #182035;
+  --bg-tertiary: #202b47;
+  --bg-card: rgba(24, 32, 53, 0.85);
+  --bg-card-hover: rgba(32, 43, 71, 0.95);
+  
+  /* Acentos Mágicos */
+  --accent-gold: #f59e0b;
+  --accent-gold-glow: #fbbf24;
+  --accent-gold-dark: #b45309;
+  
+  --accent-mana: #3b82f6;
+  --accent-mana-glow: #60a5fa;
+  --accent-mana-dark: #1d4ed8;
+
+  --accent-magic: #8b5cf6;
+  --accent-magic-glow: #a78bfa;
+  --accent-magic-dark: #6d28d9;
+
+  --accent-success: #10b981;
+  --accent-success-glow: #34d399;
+  
+  --accent-danger: #ef4444;
+  --accent-danger-glow: #f87171;
+
+  --accent-cyan: #06b6d4;
+  
+  /* Cores de Texto */
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --text-gold: #fde047;
+  --text-code: #e2e8f0;
+
+  /* Bordas e Sombras */
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-magic: rgba(139, 92, 246, 0.35);
+  --border-gold: rgba(245, 158, 11, 0.45);
+  --shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+  --shadow-magic: 0 0 20px rgba(139, 92, 246, 0.3);
+  --shadow-gold: 0 0 20px rgba(245, 158, 11, 0.35);
+
+  /* Fontes */
+  --font-heading: 'Fredoka', 'Outfit', sans-serif;
+  --font-ui: 'Outfit', sans-serif;
+  --font-code: 'Fira Code', monospace;
+
+  /* Raios de Borda */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+
+  /* Transições Suaves */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s ease;
+  --transition-bounce: 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}

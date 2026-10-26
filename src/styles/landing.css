@@ -1,0 +1,555 @@
+/* ==========================================================================
+   LANDING PAGE STYLES - MDEV CODEQUEST
+   Página de introdução, conceitos de programação e comandos básicos para alunos
+   ========================================================================== */
+
+.landing-page {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 9000;
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.18) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(59, 130, 246, 0.15) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.08) 0%, transparent 60%),
+    linear-gradient(180deg, #090c16 0%, #0d1222 50%, #080b14 100%);
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==========================================================================
+   HEADER DA LANDING PAGE
+   ========================================================================== */
+
+.landing-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 48px;
+  background: rgba(13, 18, 34, 0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-subtle);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.landing-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.landing-brand .brand-icon {
+  font-size: 32px;
+  filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.6));
+}
+
+.landing-brand .brand-title {
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.landing-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.cta-nav-btn {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff;
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 700;
+  padding: 10px 22px;
+  border-radius: var(--radius-full);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-bounce);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+}
+
+.cta-nav-btn:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 6px 22px rgba(16, 185, 129, 0.6);
+}
+
+/* ==========================================================================
+   HERO SECTION
+   ========================================================================== */
+
+.landing-hero {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 24px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 24px;
+}
+
+.hero-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(139, 92, 246, 0.2);
+  border: 1px solid var(--accent-magic-glow);
+  color: #c4b5fd;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 18px;
+  border-radius: var(--radius-full);
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+  letter-spacing: 0.5px;
+}
+
+.hero-main-title {
+  font-family: var(--font-heading);
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1.2;
+  max-width: 900px;
+  color: #ffffff;
+}
+
+.hero-main-title .gradient-text {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-description {
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  max-width: 760px;
+}
+
+/* Card de Configuração Inicial do Aluno */
+.student-start-card {
+  background: rgba(22, 30, 52, 0.85);
+  border: 2px solid var(--border-magic);
+  border-radius: var(--radius-lg);
+  padding: 24px 32px;
+  max-width: 650px;
+  width: 100%;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), var(--shadow-magic);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 10px;
+}
+
+.start-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.start-field-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent-gold-glow);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.student-name-input {
+  background: #0f1423;
+  border: 1.5px solid rgba(139, 92, 246, 0.4);
+  color: #fff;
+  font-family: var(--font-ui);
+  font-size: 16px;
+  font-weight: 600;
+  padding: 12px 18px;
+  border-radius: var(--radius-md);
+  outline: none;
+  transition: all var(--transition-fast);
+}
+
+.student-name-input:focus {
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+}
+
+/* Seletor de Heróis na Landing */
+.hero-picker-landing {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.hero-option-card {
+  background: rgba(15, 20, 35, 0.8);
+  border: 2px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 12px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all var(--transition-bounce);
+}
+
+.hero-option-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent-magic-glow);
+  background: rgba(139, 92, 246, 0.2);
+}
+
+.hero-option-card.active {
+  border-color: var(--accent-gold);
+  background: rgba(245, 158, 11, 0.2);
+  box-shadow: var(--shadow-gold);
+}
+
+.hero-option-emoji {
+  font-size: 32px;
+}
+
+.hero-option-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.enter-dungeon-btn {
+  background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+  color: #fff;
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 800;
+  padding: 16px 36px;
+  border-radius: var(--radius-full);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-bounce);
+  box-shadow: 0 6px 25px rgba(245, 158, 11, 0.5);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.enter-dungeon-btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 10px 30px rgba(245, 158, 11, 0.7);
+  background: linear-gradient(135deg, #fbbf24 0%, #f97316 100%);
+}
+
+/* ==========================================================================
+   SEÇÃO 1: COMO A MÁGICA FUNCIONA (O QUE É PROGRAMAR)
+   ========================================================================== */
+
+.landing-section {
+  max-width: 1150px;
+  margin: 0 auto;
+  padding: 50px 24px;
+  width: 100%;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.section-badge {
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--accent-gold-glow);
+  letter-spacing: 1.5px;
+}
+
+.section-title {
+  font-family: var(--font-heading);
+  font-size: 32px;
+  font-weight: 700;
+  color: #fff;
+  margin-top: 6px;
+}
+
+.section-subtitle {
+  font-size: 15px;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 8px auto 0;
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.step-card {
+  background: rgba(24, 32, 53, 0.7);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  transition: all var(--transition-bounce);
+  position: relative;
+}
+
+.step-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--accent-magic-glow);
+  background: rgba(30, 42, 70, 0.85);
+  box-shadow: var(--shadow-card);
+}
+
+.step-num-pill {
+  position: absolute;
+  top: -12px;
+  background: var(--accent-gold);
+  color: #451a03;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+}
+
+.step-icon {
+  font-size: 44px;
+  margin-top: 6px;
+}
+
+.step-card h3 {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.step-card p {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   SEÇÃO 2: GRIMÓRIO DOS COMANDOS BÁSICOS EM PYTHON
+   ========================================================================== */
+
+.commands-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.command-category-card {
+  background: rgba(24, 32, 53, 0.75);
+  border: 1px solid var(--border-magic);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.category-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 12px;
+}
+
+.category-icon {
+  font-size: 24px;
+}
+
+.category-title {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.command-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.command-row {
+  background: #0d121f;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: all var(--transition-fast);
+}
+
+.command-row:hover {
+  border-color: var(--accent-gold-glow);
+  background: #111728;
+}
+
+.code-syntax {
+  font-family: var(--font-code);
+  font-size: 14px;
+  font-weight: 600;
+  color: #38bdf8;
+}
+
+.command-explanation {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* Demonstração de Loops e Ifs Lado a Lado */
+.comparison-box {
+  background: #090d18;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.comparison-header {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent-gold);
+  text-transform: uppercase;
+}
+
+.comparison-snippet {
+  font-family: var(--font-code);
+  font-size: 13px;
+  line-height: 1.5;
+  color: #a7f3d0;
+  white-space: pre;
+}
+
+/* ==========================================================================
+   SEÇÃO 3: DICAS DE OURO DO MERLIN
+   ========================================================================== */
+
+.merlin-tips-card {
+  background: linear-gradient(135deg, rgba(30, 41, 69, 0.9), rgba(15, 20, 35, 0.95));
+  border: 2px solid var(--accent-gold);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), var(--shadow-gold);
+}
+
+.merlin-big-avatar {
+  font-size: 72px;
+  background: rgba(139, 92, 246, 0.2);
+  border: 2px solid var(--accent-magic-glow);
+  width: 110px;
+  height: 110px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  animation: floatMerlin 3s infinite alternate ease-in-out;
+}
+
+@keyframes floatMerlin {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-8px); }
+}
+
+.tips-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tips-content h3 {
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.tips-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tip-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.tip-item strong {
+  color: var(--accent-gold-glow);
+}
+
+/* ==========================================================================
+   BANNER FINAL E FOOTER
+   ========================================================================== */
+
+.landing-bottom-cta {
+  text-align: center;
+  padding: 60px 24px 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.landing-footer {
+  text-align: center;
+  padding: 24px;
+  border-top: 1px solid var(--border-subtle);
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* Responsividade */
+@media (max-width: 900px) {
+  .hero-main-title {
+    font-size: 34px;
+  }
+  .steps-grid, .commands-container {
+    grid-template-columns: 1fr;
+  }
+  .merlin-tips-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  .landing-nav {
+    padding: 14px 20px;
+  }
+}
+
+.landing-page.hidden {
+  display: none !important;
+  pointer-events: none !important;
+}

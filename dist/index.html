@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MDev CodeQuest: A Masmorra do Código | Aprenda Python Jogando</title>
+  <meta name="description" content="Plataforma gamificada e lúdica de programação em Python para crianças e jovens. Domine algoritmos, loops e condicionais controlando heróis em masmorras mágicas 2D!">
+  
+  <!-- Google Fonts: Outfit, Fredoka (amigável/infantil) e Fira Code (código) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Fredoka:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+
+  <script>
+    window.addEventListener('error', function(e) {
+      console.error('GLOBAL BROWSER ERROR:', e);
+      var box = document.getElementById('debug-global-err');
+      if (!box) {
+        box = document.createElement('div');
+        box.id = 'debug-global-err';
+        box.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#dc2626;color:#fff;padding:14px;z-index:9999999;font-family:monospace;font-size:13px;white-space:pre-wrap;box-shadow:0 4px 20px rgba(0,0,0,0.8);max-height:40vh;overflow:auto;';
+        (document.body || document.documentElement).appendChild(box);
+      }
+      box.textContent = '⚠️ Erro no Navegador: ' + (e.message || e.error || e) + '\nArquivo: ' + (e.filename || '') + ' Linha: ' + (e.lineno || '');
+    });
+
+    window.launchGameNow = function() {
+      var landing = document.getElementById("landing-page");
+      var nameInput = document.getElementById("landing-player-name");
+      if (landing) {
+        landing.classList.add("hidden");
+        landing.style.display = "none";
+      }
+      var game = document.getElementById("game-app") || document.getElementById("app");
+      if (game) {
+        game.classList.remove("hidden");
+      }
+      if (!window.codeQuestApp && typeof window.initApp === "function") {
+        window.initApp();
+      }
+      var quest = window.codeQuestApp || (window.app && window.app.gm ? window.app : null);
+      if (quest) {
+        if (nameInput && nameInput.value.trim() && quest.gm && quest.gm.state) {
+          quest.gm.state.playerName = nameInput.value.trim();
+          quest.gm.saveState();
+          quest.updateHeaderUI();
+        }
+        if (quest.threeEngine) {
+          quest.threeEngine.onResize();
+          quest.threeEngine.resetCamera();
+        }
+        if (typeof quest.showToast === "function") {
+          quest.showToast("⚔️ Bem-vindo à Masmorra do Código!");
+        }
+      }
+    };
+  </script>
+
+  <script type="module" crossorigin src="./assets/index-D9iUYL1Z.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-CmlaA0iI.css">
+</head>
+<body>
+
+  <!-- ==========================================================================
+       LANDING PAGE DE INTRODUÇÃO & GUIA DE COMANDOS PARA O ALUNO
+       ========================================================================== -->
+  <div id="landing-page" class="landing-page">
+    <!-- Navbar da Landing -->
+    <header class="landing-nav">
+      <div class="landing-brand">
+        <span class="brand-icon">⚔️</span>
+        <span class="brand-title">MDev <span style="color:#f59e0b;">CodeQuest</span></span>
+      </div>
+      <div class="landing-nav-actions">
+        <a href="#comandos-section" style="color:#94a3b8; font-size:14px; text-decoration:none; font-weight:600; margin-right:12px;">📜 Comandos Básicos</a>
+        <button class="cta-nav-btn" id="nav-start-btn" onclick="window.launchGameNow && window.launchGameNow()">Entrar na Masmorra ➔</button>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="landing-hero">
+      <div class="hero-chip">✨ Aprenda a Programar em Python Jogando!</div>
+      <h1 class="hero-main-title">
+        Comande seu Herói em uma Masmorra 3D usando <span class="gradient-text">Código Real!</span>
+      </h1>
+      <p class="hero-description">
+        Esqueça livros chatos e decorebas. No <strong>MDev CodeQuest</strong>, cada comando que você escreve é um feitiço que faz seu personagem andar, desviar de lava, coletar tesouros e derrotar monstros em 3D!
+      </p>
+
+      <!-- Card de Configuração Inicial do Aluno -->
+      <div class="student-start-card">
+        <div class="start-field-group">
+          <label class="start-field-label" for="landing-player-name">Seu Nome de Aventureiro:</label>
+          <input type="text" id="landing-player-name" class="student-name-input" value="Mago Aprendiz" placeholder="Digite seu nome ou apelido...">
+        </div>
+
+        <div class="start-field-group">
+          <label class="start-field-label">Escolha seu Personagem Inicial:</label>
+          <div class="hero-picker-landing" id="landing-hero-picker">
+            <div class="hero-option-card active" data-hero="wizard">
+              <span class="hero-option-emoji">🧙‍♂️</span>
+              <span class="hero-option-name">Mago</span>
+            </div>
+            <div class="hero-option-card" data-hero="mage">
+              <span class="hero-option-emoji">🧙‍♀️</span>
+              <span class="hero-option-name">Feiticeira</span>
+            </div>
+            <div class="hero-option-card" data-hero="knight">
+              <span class="hero-option-emoji">⚔️</span>
+              <span class="hero-option-name">Cavaleiro</span>
+            </div>
+            <div class="hero-option-card" data-hero="robot">
+              <span class="hero-option-emoji">🤖</span>
+              <span class="hero-option-name">Robô</span>
+            </div>
+          </div>
+        </div>
+
+        <button class="enter-dungeon-btn" id="start-game-main-btn" onclick="window.launchGameNow && window.launchGameNow()">
+          <span>⚔️ Iniciar Aventura na Masmorra!</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 1: COMO A MÁGICA FUNCIONA -->
+    <section class="landing-section">
+      <div class="section-header">
+        <span class="section-badge">Como Funciona?</span>
+        <h2 class="section-title">O que é Programar?</h2>
+        <p class="section-subtitle">Programar é simplesmente dar ordens ao computador para que ele faça exatamente o que você quer!</p>
+      </div>
+
+      <div class="steps-grid">
+        <div class="step-card">
+          <span class="step-num-pill">Passo 1</span>
+          <div class="step-icon">📜</div>
+          <h3>1. Você Escreve o Feitiço</h3>
+          <p>No livro de magias, você digita as instruções em Python, como passos para frente ou feitiços de ataque.</p>
+        </div>
+
+        <div class="step-card">
+          <span class="step-num-pill">Passo 2</span>
+          <div class="step-icon">▶️</div>
+          <h3>2. Lança o Código</h3>
+          <p>Ao apertar "Lançar Código!", o computador lê cada linha na ordem exata em que você escreveu.</p>
+        </div>
+
+        <div class="step-card">
+          <span class="step-num-pill">Passo 3</span>
+          <div class="step-icon">🧙‍♂️</div>
+          <h3>3. O Herói Age em 3D</h3>
+          <p>Seu personagem salta, pega os cristais, desvia das armadilhas e entra no portal mágico da vitória!</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 2: GRIMÓRIO DE COMANDOS BÁSICOS -->
+    <section class="landing-section" id="comandos-section">
+      <div class="section-header">
+        <span class="section-badge">Grimório do Aprendiz</span>
+        <h2 class="section-title">Comandos Básicos de Python no Jogo</h2>
+      <div style="display:flex; justify-content:center; margin-top:12px;">
+        <div class="lang-selector-bar" style="padding:4px; gap:4px; background:#182035;">
+          <button class="lang-pill active" id="landing-lang-pt" style="font-size:13px; padding:6px 16px;">🇧🇷 Português</button>
+          <button class="lang-pill" id="landing-lang-en" style="font-size:13px; padding:6px 16px;">🇺🇸 English</button>
+        </div>
+      </div>
+        <p class="section-subtitle">Aqui estão todos os feitiços que você usará para vencer as fases da masmorra.</p>
+      </div>
+
+      <div class="commands-container">
+        <!-- Categoria 1: Movimentos -->
+        <div class="command-category-card">
+          <div class="category-header">
+            <span class="category-icon">🚶‍♂️</span>
+            <h3 class="category-title">1. Movimentos Básicos</h3>
+          </div>
+          <div class="command-items-list">
+            <div class="command-row">
+              <code class="code-syntax">heroi.andar_direita()</code>
+              <span class="command-explanation">Dá 1 passo para a direita no tabuleiro.</span>
+            </div>
+            <div class="command-row">
+              <code class="code-syntax">heroi.andar_esquerda()</code>
+              <span class="command-explanation">Dá 1 passo para a esquerda no tabuleiro.</span>
+            </div>
+            <div class="command-row">
+              <code class="code-syntax">heroi.andar_cima()</code>
+              <span class="command-explanation">Sobe 1 bloco em direção ao norte.</span>
+            </div>
+            <div class="command-row">
+              <code class="code-syntax">heroi.andar_baixo()</code>
+              <span class="command-explanation">Desce 1 bloco em direção ao sul.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Categoria 2: Ações & Interações -->
+        <div class="command-category-card">
+          <div class="category-header">
+            <span class="category-icon">🗡️</span>
+            <h3 class="category-title">2. Ações e Interações</h3>
+          </div>
+          <div class="command-items-list">
+            <div class="command-row">
+              <code class="code-syntax">heroi.coletar()</code>
+              <span class="command-explanation">Pega cristais de mana 💎 ou chaves douradas 🗝️ do chão.</span>
+            </div>
+            <div class="command-row">
+              <code class="code-syntax">heroi.atacar()</code>
+              <span class="command-explanation">Desfere um golpe mágico com o cajado para derrotar Slimes ou monstros!</span>
+            </div>
+            <div class="command-row">
+              <code class="code-syntax">heroi.abrir_porta()</code>
+              <span class="command-explanation">Abre uma porta trancada se você já tiver coletado a chave.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Categoria 3: Laços de Repetição (for) -->
+        <div class="command-category-card">
+          <div class="category-header">
+            <span class="category-icon">🔄</span>
+            <h3 class="category-title">3. O Poder dos Laços (Loops)</h3>
+          </div>
+          <p style="font-size:13px; color:#94a3b8;">Em vez de digitar o mesmo comando várias vezes, use o laço <code>for</code>:</p>
+          <div class="comparison-box">
+            <span class="comparison-header">Exemplo em Python:</span>
+            <code class="comparison-snippet"># Repete 4 passos com apenas 2 linhas!
+for i in range(4):
+    heroi.andar_direita()</code>
+          </div>
+          <span style="font-size:12px; color:#fde68a;">💡 Dica: Os comandos dentro do for precisam de 4 espaços de indentação!</span>
+        </div>
+
+        <!-- Categoria 4: Tomando Decisões (if) -->
+        <div class="command-category-card">
+          <div class="category-header">
+            <span class="category-icon">🧠</span>
+            <h3 class="category-title">4. Tomando Decisões (If / Else)</h3>
+          </div>
+          <p style="font-size:13px; color:#94a3b8;">Ensine seu herói a avaliar o que há na frente antes de agir:</p>
+          <div class="comparison-box">
+            <span class="comparison-header">Exemplo em Python:</span>
+            <code class="comparison-snippet"># Se tiver um monstro, ataque!
+if heroi.tem_inimigo():
+    heroi.atacar()
+else:
+    heroi.andar_direita()</code>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 3: DICAS DE OURO DO MESTRE MERLIN -->
+    <section class="landing-section">
+      <div class="merlin-tips-card">
+        <div class="merlin-big-avatar">🧙‍♂️</div>
+        <div class="tips-content">
+          <h3>3 Dicas Secretas do Mestre Merlin:</h3>
+          <div class="tips-list">
+            <div class="tip-item">
+              <span>🔹</span>
+              <span><strong>Atenção aos Dois Pontos:</strong> Em Python, depois de <code>for i in range(3):</code> ou <code>if condicao:</code>, você <strong>sempre</strong> precisa colocar <code>:</code> no final!</span>
+            </div>
+            <div class="tip-item">
+              <span>🔹</span>
+              <span><strong>Use a Paleta de Feitiços:</strong> Está com preguiça de digitar? Clique nos botões coloridos de atalho logo acima do editor de código para inserir os comandos prontos!</span>
+            </div>
+            <div class="tip-item">
+              <span>🔹</span>
+              <span><strong>Gire a Masmorra:</strong> No jogo em 3D, você pode clicar e arrastar com o mouse para ver os caminhos secretos de qualquer ângulo!</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Banner Final -->
+    <div class="landing-bottom-cta">
+      <h2 style="font-family: var(--font-heading); font-size: 28px; color: #fff;">Pronto para se tornar um Mestre da Programação?</h2>
+      <button class="enter-dungeon-btn" id="bottom-start-btn" onclick="window.launchGameNow && window.launchGameNow()">
+        <span>🏰 Entrar na Masmorra do Código ➔</span>
+      </button>
+    </div>
+
+    <footer class="landing-footer">
+      <p>⚔️ <strong>MDev CodeQuest</strong> — Criado com dedicação para ensinar programação e lógica de forma lúdica.</p>
+    </footer>
+  </div>
+
+  <div id="game-app" class="app-container">
+    <!-- Topo da Aplicação / Barra de Status do Jogador -->
+    <header class="app-header">
+      <div class="header-left">
+        <div class="brand-logo" id="logo-btn" title="MDev CodeQuest">
+          <span class="logo-icon">⚔️</span>
+          <div class="logo-text">
+            <span class="logo-title">MDev <span class="highlight">CodeQuest</span></span>
+            <span class="logo-badge">Python RPG</span>
+          </div>
+        </div>
+
+        <button class="nav-map-btn" id="back-to-landing-btn" title="Voltar à Página Inicial e Guia de Comandos">
+          <span class="btn-icon">🏠</span>
+          <span class="btn-text">Guia & Início</span>
+        </button>
+        <button class="nav-map-btn" id="open-map-btn" title="Mapa de Fases">
+          <span class="btn-icon">🗺️</span>
+          <span class="btn-text">Fases</span>
+          <span class="current-level-tag" id="header-level-tag">Fase 1</span>
+        </button>
+      </div>
+
+      <div class="header-center">
+        <!-- Status do Jogador -->
+        <div class="player-profile" id="player-profile-widget">
+          <div class="avatar-box" id="avatar-btn" title="Mudar Personagem">
+            <span class="avatar-emoji" id="player-avatar-icon">🧙‍♂️</span>
+            <span class="level-pill" id="player-level-badge">Nv. 1</span>
+          </div>
+          <div class="xp-container">
+            <div class="xp-labels">
+              <span class="player-name" id="player-name-display">Mago Aprendiz</span>
+              <span class="xp-text" id="xp-counter-text">0 / 100 XP</span>
+            </div>
+            <div class="xp-progress-bar">
+              <div class="xp-fill" id="xp-progress-fill" style="width: 15%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Contadores de Recompensa -->
+        <div class="stat-badge gems-stat" title="Gemas Coletadas">
+          <span class="stat-icon">💎</span>
+          <span class="stat-value" id="gems-count-display">0</span>
+        </div>
+
+        <div class="stat-badge stars-stat" title="Estrelas Conquistadas">
+          <span class="stat-icon">⭐</span>
+          <span class="stat-value" id="stars-count-display">0/24</span>
+        </div>
+
+        <div class="stat-badge streak-stat" title="Sequência de Dias Estudando">
+          <span class="stat-icon">🔥</span>
+          <span class="stat-value" id="streak-count-display">1 dia</span>
+        </div>
+
+        <!-- Botões de Ação do Header -->
+        <button class="header-icon-btn" id="open-trophies-btn" title="Conquistas & Medalhas">
+          🏆
+        </button>
+        <button class="header-icon-btn" id="sound-toggle-btn" title="Ligar/Desligar Som">
+          🔊
+        </button>
+        <button class="header-icon-btn" id="open-guide-btn" title="Como Jogar & Dicas">
+          ❓
+        </button>
+      </div>
+    </header>
+
+    <!-- Área Principal de Jogo e Aprendizado -->
+    <main class="main-workspace">
+      <!-- Painel Esquerdo: Mundo da Masmorra (Game Board) -->
+      <section class="game-section">
+        <div class="game-header">
+          <div class="level-meta">
+            <h1 class="level-title" id="current-level-title">Fase 1: O Despertar do Herói</h1>
+            <p class="level-subtitle" id="current-level-subtitle">Use comandos simples em Python para andar e coletar o cristal!</p>
+          </div>
+          <div class="board-toggles">
+            <button class="toggle-btn active" id="toggle-3d-mode-btn" title="Alternar entre Visual 3D e 2D">
+              <span>🎮 3D Ativo</span>
+            </button>
+            <button class="toggle-btn" id="reset-camera-btn" title="Visão Isométrica 3D">
+              <span>🎥 Isométrica</span>
+            </button>
+            <button class="toggle-btn" id="topdown-camera-btn" title="Visão de Cima / Tática">
+              <span>👁️ Top-Down</span>
+            </button>
+            <button class="toggle-btn" id="toggle-speed-btn" title="Velocidade da Execução">
+              <span id="speed-label">⚡ 1x</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- O Tabuleiro do Jogo 2D -->
+        <div class="canvas-wrapper" id="canvas-container">
+          <!-- Canvas 3D WebGL (Three.js) -->
+          <canvas id="three-canvas" class="three-canvas"></canvas>
+
+          <!-- Tabuleiro 2D Fallback / Opcional -->
+          <div id="dungeon-board" class="dungeon-board hidden"></div>
+
+          <!-- Dica de Interação com a Câmera 3D -->
+          <div class="camera-hint-badge" id="camera-hint">
+            <span>🖱️ Arraste para girar em 3D • Use o scroll para zoom</span>
+          </div>
+
+          <!-- Overlay de Notificação do Jogo -->
+          <div id="game-toast-overlay" class="game-toast-overlay hidden">
+            <div class="toast-content" id="toast-message"></div>
+          </div>
+        </div>
+
+        <!-- Controles de Execução do Jogo -->
+        <div class="game-controls-bar">
+          <div class="controls-left">
+            <button class="action-btn run-btn" id="run-code-btn" title="Executar Feitiço (Ctrl + Enter)">
+              <span class="btn-icon">▶</span>
+              <span class="btn-label">Lançar Código!</span>
+            </button>
+            <button class="action-btn step-btn" id="step-code-btn" title="Passo a Passo (Avançar 1 linha)">
+              <span class="btn-icon">⏭</span>
+              <span class="btn-label">Passo a Passo</span>
+            </button>
+            <button class="action-btn reset-btn" id="reset-board-btn" title="Reiniciar Herói para o Início">
+              <span class="btn-icon">↺</span>
+              <span class="btn-label">Reiniciar</span>
+            </button>
+          </div>
+
+          <div class="controls-right">
+            <div class="inventory-bar" id="hero-inventory-bar">
+              <span class="inv-label">Mochila:</span>
+              <div class="inv-items" id="inventory-items-container">
+                <span class="inv-empty-msg">Vazia</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Painel Direito: Editor de Código Python & Assistente Mágico -->
+      <section class="editor-section">
+        <!-- Barra de Abas do Editor -->
+        <div class="editor-tab-bar">
+          <div class="editor-tab active">
+            <span class="tab-icon">🐍</span>
+            <span class="tab-name">feitico_magico.py</span>
+          </div>
+          <div class="lang-selector-bar">
+            <button class="lang-pill active" id="btn-lang-pt" title="Programar em Português">🇧🇷 Português</button>
+            <button class="lang-pill" id="btn-lang-en" title="Program in English">🇺🇸 English</button>
+          </div>
+          <div class="editor-actions">
+            <button class="editor-mini-btn" id="clear-code-btn" title="Restaurar código inicial desta fase">
+              ↺ Limpar Código
+            </button>
+            <button class="editor-mini-btn" id="copy-code-btn" title="Copiar Código">
+              📋 Copiar
+            </button>
+          </div>
+        </div>
+
+        <!-- Caixa de Ferramentas / Blocos de Atalho Rápidos para Crianças -->
+        <div class="magic-spells-palette">
+          <div class="palette-header">
+            <span class="palette-title">✨ Feitiços Prontos (Clique para Adicionar):</span>
+          </div>
+          <div class="spell-buttons-scroll" id="spell-palette-container">
+            <!-- Botões rápidos de Python inseridos dinamicamente de acordo com a fase -->
+          </div>
+        </div>
+
+        <!-- Área do Editor de Código Real -->
+        <div class="code-editor-wrapper">
+          <div class="line-numbers" id="editor-line-numbers">
+            <!-- 1, 2, 3... -->
+          </div>
+          <div class="editor-textarea-container">
+            <!-- Textarea de edição real -->
+            <textarea id="code-input" class="code-textarea" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="# Digite seu código Python aqui..."></textarea>
+            <!-- Highlight de sintaxe espelhado por trás para colorização mágica -->
+            <pre id="code-highlight" class="code-highlight" aria-hidden="true"><code></code></pre>
+            <!-- Indicador da linha em execução atual -->
+            <div id="active-line-marker" class="active-line-marker hidden"></div>
+          </div>
+        </div>
+
+        <!-- Painel Inferior: Console Mágico e Dicas do Mestre Merlin -->
+        <div class="console-panel">
+          <div class="console-header">
+            <div class="console-tab active" id="tab-merlin">
+              <span>🧙‍♂️ Tutor Merlin</span>
+            </div>
+            <div class="console-tab" id="tab-output">
+              <span>📜 Saída / Terminal (<span id="output-badge-count">0</span>)</span>
+            </div>
+          </div>
+
+          <div class="console-body">
+            <!-- Aba 1: Merlin mascote dando orientações -->
+            <div class="merlin-box" id="merlin-content">
+              <div class="merlin-avatar">🧙‍♂️</div>
+              <div class="merlin-bubble">
+                <p id="merlin-message">
+                  Olá, jovem aventureiro! Bem-vindo ao <strong>MDev CodeQuest</strong>! 
+                  Escreva os passos do herói no livro de feitiços e aperte <strong>"Lançar Código!"</strong> para ver a mágica acontecer!
+                </p>
+                <div class="merlin-hint-actions">
+                  <button class="hint-btn" id="request-hint-btn">💡 Preciso de uma Dica</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Aba 2: Log de Saída Real do Python (print) -->
+            <div class="output-box hidden" id="output-content">
+              <div class="output-logs" id="terminal-logs">
+                <span class="log-info">> Terminal de Feitiços pronto. Aguardando execução...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- MODAL 1: VITÓRIA & FASE CONCLUÍDA! -->
+    <div id="victory-modal" class="modal-backdrop hidden">
+      <div class="modal-card victory-card">
+        <div class="victory-header">
+          <span class="victory-banner">🎉 FASE CONCLUÍDA! 🎉</span>
+          <h2 class="victory-title" id="victory-level-name">O Despertar do Herói</h2>
+        </div>
+
+        <div class="victory-stars" id="victory-stars-box">
+          <div class="star-wrapper star-1"><span class="star-icon">⭐</span></div>
+          <div class="star-wrapper star-2"><span class="star-icon">⭐</span></div>
+          <div class="star-wrapper star-3"><span class="star-icon">⭐</span></div>
+        </div>
+
+        <div class="star-criteria-list" id="star-criteria-list">
+          <!-- Critérios de estrelas explicados para o aluno aprender clean code -->
+        </div>
+
+        <div class="victory-rewards">
+          <div class="reward-item">
+            <span class="reward-icon">⚡</span>
+            <div class="reward-info">
+              <span class="reward-val" id="victory-xp-earned">+50 XP</span>
+              <span class="reward-lbl">Experiência</span>
+            </div>
+          </div>
+          <div class="reward-item">
+            <span class="reward-icon">💎</span>
+            <div class="reward-info">
+              <span class="reward-val" id="victory-gems-earned">+1</span>
+              <span class="reward-lbl">Cristal Mágico</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Se desbloquear nova conquista na fase -->
+        <div id="victory-badge-unlock" class="badge-unlock-box hidden">
+          <span class="unlock-icon" id="unlocked-badge-icon">🏆</span>
+          <div class="unlock-text">
+            <strong>Nova Conquista Desbloqueada!</strong>
+            <span id="unlocked-badge-title">Primeiro Feitiço</span>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button class="modal-btn replay-btn" id="victory-replay-btn">
+            ↺ Jogar Novamente
+          </button>
+          <button class="modal-btn primary-btn" id="victory-next-btn">
+            Próxima Fase ➔
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 2: MAPA DE FASES (MUNDO DA AVENTURA) -->
+    <div id="map-modal" class="modal-backdrop hidden">
+      <div class="modal-card map-card">
+        <div class="modal-card-header">
+          <div class="header-titles">
+            <h2>🗺️ Trilha da Aventura Python</h2>
+            <p>Escolha uma fase para desafiar a Masmorra do Código</p>
+          </div>
+          <button class="close-modal-btn" id="close-map-btn">✕</button>
+        </div>
+
+        <div class="map-worlds-container" id="map-levels-list">
+          <!-- Fases geradas dinamicamente com trilha e estrelas -->
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 3: CONQUISTAS & MEDALHAS -->
+    <div id="trophies-modal" class="modal-backdrop hidden">
+      <div class="modal-card trophies-card">
+        <div class="modal-card-header">
+          <div class="header-titles">
+            <h2>🏆 Livro de Conquistas do Mago</h2>
+            <p>Desbloqueie troféus especiais conforme você aprende a programar!</p>
+          </div>
+          <button class="close-modal-btn" id="close-trophies-btn">✕</button>
+        </div>
+
+        <div class="trophies-grid" id="trophies-grid-container">
+          <!-- Badges geradas dinamicamente -->
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 4: COMO JOGAR & GUIA DE COMANDOS -->
+    <div id="guide-modal" class="modal-backdrop hidden">
+      <div class="modal-card guide-card">
+        <div class="modal-card-header">
+          <div class="header-titles">
+            <h2>📜 Guia do Aprendiz: Comandos Python</h2>
+            <p>Aprenda como comandar seu herói na masmorra</p>
+          </div>
+          <button class="close-modal-btn" id="close-guide-btn">✕</button>
+        </div>
+
+        <div class="guide-content">
+          <div class="guide-section">
+            <h3>🚶‍♂️ 1. Movimentos Básicos</h3>
+            <div class="code-example-card">
+              <code>heroi.andar_direita()   # Dá um passo para a direita</code>
+              <code>heroi.andar_esquerda()  # Dá um passo para a esquerda</code>
+              <code>heroi.andar_cima()      # Dá um passo para cima</code>
+              <code>heroi.andar_baixo()     # Dá um passo para baixo</code>
+            </div>
+          </div>
+
+          <div class="guide-section">
+            <h3>🗡️ 2. Ações e Interações</h3>
+            <div class="code-example-card">
+              <code>heroi.coletar()         # Pega gemas, moedas ou chaves do chão</code>
+              <code>heroi.atacar()          # Desfere um golpe de espada no monstro</code>
+              <code>heroi.abrir_porta()      # Abre uma porta trancada (se tiver chave!)</code>
+            </div>
+          </div>
+
+          <div class="guide-section">
+            <h3>🔄 3. Laços de Repetição (Loops)</h3>
+            <div class="code-example-card">
+              <code># Repete o bloco 4 vezes sem precisar digitar 4 linhas!</code>
+              <code>for i in range(4):</code>
+              <code>    heroi.andar_direita()</code>
+            </div>
+          </div>
+
+          <div class="guide-section">
+            <h3>🧠 4. Tomando Decisões (If / Else)</h3>
+            <div class="code-example-card">
+              <code># Se houver um monstro na frente, ataque!</code>
+              <code>if heroi.tem_inimigo():</code>
+              <code>    heroi.atacar()</code>
+              <code>else:</code>
+              <code>    heroi.andar_frente()</code>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button class="modal-btn primary-btn" id="guide-ok-btn">Entendi! Vamos Jogar!</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 5: SELEÇÃO DE PERSONAGEM -->
+    <div id="character-modal" class="modal-backdrop hidden">
+      <div class="modal-card character-card">
+        <div class="modal-card-header">
+          <div class="header-titles">
+            <h2>🧙‍♀️ Escolha seu Herói</h2>
+            <p>Selecione quem você quer controlar na aventura</p>
+          </div>
+          <button class="close-modal-btn" id="close-character-btn">✕</button>
+        </div>
+
+        <div class="characters-grid" id="characters-selector-grid">
+          <!-- Personagens gerados dinamicamente -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

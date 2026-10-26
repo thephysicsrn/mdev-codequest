@@ -1,0 +1,414 @@
+/* ==========================================================================
+   DUNGEON 2D BOARD & GAME VISUALS
+   Grade estilizada, ladrilhos de pedra, itens mágicos, inimigos e herói animado
+   ========================================================================== */
+
+.canvas-wrapper {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #090c15;
+  border-radius: var(--radius-lg);
+  border: 2px solid rgba(139, 92, 246, 0.25);
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.8), 0 10px 30px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  min-height: 380px;
+  padding: 12px;
+}
+
+/* Tabuleiro da Masmorra */
+.dungeon-board {
+  position: relative;
+  display: grid;
+  gap: 4px;
+  background: #111625;
+  padding: 10px;
+  border-radius: var(--radius-md);
+  border: 4px solid #232c45;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+  user-select: none;
+}
+
+/* Células individuais da Grade */
+.tile {
+  position: relative;
+  width: 58px;
+  height: 58px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  transition: all 0.2s ease;
+  overflow: visible;
+}
+
+/* Tipos de Chão / Ladrilhos */
+.tile-floor {
+  background: #192135;
+  background-image: 
+    linear-gradient(45deg, rgba(255, 255, 255, 0.02) 25%, transparent 25%), 
+    linear-gradient(-45deg, rgba(255, 255, 255, 0.02) 25%, transparent 25%);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.tile-floor:hover {
+  background-color: #1f2a44;
+}
+
+/* Parede de Pedra */
+.tile-wall {
+  background: linear-gradient(180deg, #2c364f 0%, #1a2030 100%);
+  border: 2px solid #3c4969;
+  border-radius: 6px;
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.1), 0 4px 6px rgba(0, 0, 0, 0.4);
+}
+
+.tile-wall::after {
+  content: '🧱';
+  font-size: 20px;
+  opacity: 0.7;
+}
+
+/* Lava Fervente */
+.tile-lava {
+  background: radial-gradient(circle, #f97316 0%, #dc2626 70%, #7f1d1d 100%);
+  border: 1px solid #ef4444;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.5);
+  animation: lavaPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes lavaPulse {
+  0% { filter: brightness(0.9); }
+  100% { filter: brightness(1.2); }
+}
+
+.tile-lava::after {
+  content: '🔥';
+  font-size: 22px;
+  animation: flameFlicker 1.2s infinite alternate;
+}
+
+@keyframes flameFlicker {
+  0% { transform: scale(0.9) translateY(0); }
+  100% { transform: scale(1.1) translateY(-2px); }
+}
+
+/* Espinhos / Armadilha */
+.tile-trap {
+  background: #192135;
+  border: 1px dashed rgba(239, 68, 68, 0.5);
+}
+
+.tile-trap::after {
+  content: '⚠️';
+  font-size: 20px;
+}
+
+/* Indicador de Coordenadas X, Y */
+.coord-label {
+  position: absolute;
+  top: 2px;
+  left: 3px;
+  font-family: var(--font-code);
+  font-size: 9px;
+  font-weight: 700;
+  color: rgba(148, 163, 184, 0.6);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ==========================================================================
+   ITENS COLETÁVEIS & OBJETOS NA MASMORRA
+   ========================================================================== */
+
+/* Cristal Mágico / Gema */
+.gem-item {
+  font-size: 26px;
+  filter: drop-shadow(0 0 8px #60a5fa);
+  animation: gemFloat 2.4s ease-in-out infinite alternate;
+  z-index: 10;
+}
+
+@keyframes gemFloat {
+  0% { transform: translateY(-2px) scale(0.95); filter: drop-shadow(0 0 6px #3b82f6); }
+  100% { transform: translateY(2px) scale(1.05); filter: drop-shadow(0 0 14px #60a5fa); }
+}
+
+/* Moeda de Ouro */
+.coin-item {
+  font-size: 24px;
+  filter: drop-shadow(0 0 6px #f59e0b);
+  animation: coinSpin 3s ease-in-out infinite alternate;
+}
+
+@keyframes coinSpin {
+  0% { transform: scale(0.95); }
+  100% { transform: scale(1.1); }
+}
+
+/* Chave Dourada */
+.key-item {
+  font-size: 24px;
+  filter: drop-shadow(0 0 8px #fbbf24);
+  animation: keyGleam 2s infinite alternate;
+}
+
+@keyframes keyGleam {
+  0% { transform: rotate(-10deg); }
+  100% { transform: rotate(10deg); }
+}
+
+/* Porta Trancada */
+.door-item {
+  font-size: 28px;
+  transition: transform 0.4s ease;
+}
+
+.door-item.open {
+  transform: scale(0.6);
+  opacity: 0.3;
+}
+
+/* Portal Mágico de Vitória */
+.portal-item {
+  font-size: 32px;
+  animation: portalSpin 4s linear infinite;
+  filter: drop-shadow(0 0 12px #a855f7);
+}
+
+@keyframes portalSpin {
+  0% { transform: rotate(0deg) scale(0.95); }
+  50% { transform: rotate(180deg) scale(1.1); }
+  100% { transform: rotate(360deg) scale(0.95); }
+}
+
+/* Baú do Tesouro */
+.chest-item {
+  font-size: 26px;
+  filter: drop-shadow(0 0 8px #f59e0b);
+}
+
+/* ==========================================================================
+   MONSTROS & INIMIGOS
+   ========================================================================== */
+
+.enemy-mob {
+  position: relative;
+  font-size: 28px;
+  z-index: 10;
+  transition: all 0.3s ease;
+  animation: enemyIdle 1.8s ease-in-out infinite alternate;
+}
+
+@keyframes enemyIdle {
+  0% { transform: scale(0.92) translateY(0); }
+  100% { transform: scale(1.05) translateY(-3px); }
+}
+
+.enemy-mob.defeated {
+  animation: enemyDefeat 0.5s forwards ease-out;
+}
+
+@keyframes enemyDefeat {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.4) rotate(20deg); filter: hue-rotate(90deg); }
+  100% { transform: scale(0); opacity: 0; }
+}
+
+/* Slime */
+.slime-mob {
+  filter: drop-shadow(0 0 8px #10b981);
+}
+
+/* Golem Boss */
+.golem-mob {
+  font-size: 34px;
+  filter: drop-shadow(0 0 12px #ef4444);
+}
+
+/* ==========================================================================
+   O HERÓI (SPRITE & ANIMAÇÕES)
+   ========================================================================== */
+
+.hero-sprite {
+  position: absolute;
+  width: 58px;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  z-index: 20;
+  transition: top 0.35s cubic-bezier(0.34, 1.3, 0.64, 1), left 0.35s cubic-bezier(0.34, 1.3, 0.64, 1);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.6));
+  pointer-events: none;
+}
+
+.hero-body {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s ease;
+}
+
+/* Respiração Idle do Herói */
+.hero-body.idle {
+  animation: heroIdle 2.5s ease-in-out infinite alternate;
+}
+
+@keyframes heroIdle {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-2px); }
+}
+
+/* Passo / Andar */
+.hero-body.walking {
+  animation: heroStep 0.3s ease-in-out;
+}
+
+@keyframes heroStep {
+  0% { transform: scale(1) translateY(0); }
+  50% { transform: scale(1.15, 0.9) translateY(-6px); }
+  100% { transform: scale(1) translateY(0); }
+}
+
+/* Golpe de Espada / Magia */
+.hero-body.attacking {
+  animation: heroAttack 0.4s ease-out;
+}
+
+@keyframes heroAttack {
+  0% { transform: scale(1) rotate(0); }
+  30% { transform: scale(1.3) rotate(-20deg); }
+  60% { transform: scale(1.2) rotate(25deg); filter: drop-shadow(0 0 14px #f59e0b); }
+  100% { transform: scale(1) rotate(0); }
+}
+
+/* Efeito de Dano / Bateu na Parede */
+.hero-body.bumped {
+  animation: heroBump 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+
+@keyframes heroBump {
+  10%, 90% { transform: translate3d(-3px, 0, 0); }
+  20%, 80% { transform: translate3d(4px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+  40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
+/* Feitiço / Vitória */
+.hero-body.victory {
+  animation: heroVictory 0.6s ease-in-out infinite alternate;
+}
+
+@keyframes heroVictory {
+  0% { transform: translateY(0) scale(1); }
+  100% { transform: translateY(-8px) scale(1.15); filter: drop-shadow(0 0 16px #fbbf24); }
+}
+
+/* Aura Mágica sob os pés do herói */
+.hero-aura {
+  position: absolute;
+  bottom: 4px;
+  width: 32px;
+  height: 10px;
+  background: radial-gradient(ellipse, rgba(139, 92, 246, 0.6) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: -1;
+  animation: auraPulse 2s infinite alternate;
+}
+
+@keyframes auraPulse {
+  0% { transform: scale(0.8); opacity: 0.4; }
+  100% { transform: scale(1.2); opacity: 0.8; }
+}
+
+/* Efeito de Partículas / Coleta */
+.collect-particle {
+  position: absolute;
+  pointer-events: none;
+  font-size: 18px;
+  animation: floatUpFade 0.7s forwards ease-out;
+  z-index: 30;
+}
+
+@keyframes floatUpFade {
+  0% { transform: translateY(0) scale(0.8); opacity: 1; }
+  100% { transform: translateY(-30px) scale(1.3); opacity: 0; }
+}
+
+/* Toast de Alerta do Jogo */
+.game-toast-overlay {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 40;
+  pointer-events: none;
+  animation: toastSlide 0.3s ease-out;
+}
+
+@keyframes toastSlide {
+  0% { transform: translate(-50%, -15px); opacity: 0; }
+  100% { transform: translate(-50%, 0); opacity: 1; }
+}
+
+.toast-content {
+  background: rgba(15, 20, 35, 0.95);
+  border: 1px solid var(--accent-gold);
+  color: var(--text-primary);
+  padding: 8px 18px;
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ==========================================================================
+   ESTILOS ADICIONAIS DO MODO 3D (THREE.JS)
+   ========================================================================== */
+
+.three-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  outline: none;
+  cursor: grab;
+  z-index: 1;
+}
+
+.three-canvas:active {
+  cursor: grabbing;
+}
+
+/* Dica de rotação 3D interativa */
+.camera-hint-badge {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(15, 20, 35, 0.75);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 14px;
+  border-radius: var(--radius-full);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  z-index: 15;
+  transition: opacity 0.3s ease;
+}
